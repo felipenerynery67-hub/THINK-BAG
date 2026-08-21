@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Think Bag — Mochila Inteligente</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ================= TELA 1: LANDING PAGE & AUTENTICAÇÃO ================= -->
+    <div id="screen-landing" class="screen active">
+        <header class="landing-header">
+            <div class="logo-area">
+                🎒 Think Bag
+            </div>
+            <div class="badge-dt">Projeto Design Thinking</div>
+        </header>
+
+        <main class="hero-container">
+            <div class="hero-text">
+                <span class="tag-org"># ORGANIZAÇÃO ESCOLAR</span>
+                <h1>Nunca mais esqueça o material da próxima aula.</h1>
+                <p>O professor publica os materiais, o aluno recebe o lembrete e confere a mochila em menos de 2 minutos — sem depender só da memória.</p>
+
+                <div class="hero-features">
+                    <div class="feature-mini">
+                        <strong>⏰ Lembretes na hora certa</strong>
+                        <p>Aviso à noite e pela manhã, antes de sair de casa.</p>
+                    </div>
+                    <div class="feature-mini">
+                        <strong>✅ Checklist por aula</strong>
+                        <p>Marque cada item e veja o progresso da mochila.</p>
+                    </div>
+                    <div class="feature-mini">
+                        <strong>📚 Lista do professor</strong>
+                        <p>A lista vem direto de quem dá a aula, sempre atualizada.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD DE LOGIN / CADASTRO -->
+            <div class="auth-card">
+                <div class="role-selector">
+                    <button type="button" id="btn-role-aluno" class="role-btn active" onclick="setRole('aluno')">👤 Sou aluno</button>
+                    <button type="button" id="btn-role-prof" class="role-btn" onclick="setRole('professor')">👨‍🏫 Sou professor</button>
+                </div>
+
+                <!-- ABAS LOGIN / CADASTRO -->
+                <div class="auth-tabs">
+                    <button type="button" id="tab-btn-login" class="tab-auth active" onclick="switchAuthTab('login')">Login</button>
+                    <button type="button" id="tab-btn-cad" class="tab-auth" onclick="switchAuthTab('cadastro')">Cadastro</button>
+                </div>
+
+                <!-- FORMULÁRIO DE LOGIN -->
+                <form id="form-login" onsubmit="realizarLogin(event)">
+                    <div class="form-group">
+                        <label>E-mail</label>
+                        <input type="email" id="login-email" class="input-field" required placeholder="seu@email.com" value="ana.aluna@escola.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Senha</label>
+                        <input type="password" id="login-senha" class="input-field" required placeholder="••••••••" value="123">
+                    </div>
+                    <button type="submit" id="submit-login-btn" class="btn-primary">Entrar como aluno</button>
+                </form>
+
+                <!-- FORMULÁRIO DE CADASTRO -->
+                <form id="form-cadastro" onsubmit="realizarCadastro(event)" style="display: none;">
+                    <div class="form-group">
+                        <label>Nome Completo</label>
+                        <input type="text" id="cad-nome" class="input-field" required placeholder="Seu nome completo">
+                    </div>
+                    <div class="form-group">
+                        <label>E-mail</label>
+                        <input type="email" id="cad-email" class="input-field" required placeholder="seu@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Senha</label>
+                        <input type="password" id="cad-senha" class="input-field" required placeholder="Crie uma senha">
+                    </div>
+                    <button type="submit" class="btn-primary">Criar conta e entrar</button>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <!-- ================= TELA 2: DASHBOARD INTERNO ================= -->
+    <div id="screen-dashboard" class="screen">
+        <div class="dashboard-layout">
+
+            <!-- SIDEBAR -->
+            <aside class="sidebar">
+                <div>
+                    <div class="sidebar-logo">
+                        🎒 Think Bag
+                    </div>
+                    <ul class="sidebar-menu">
+                        <li><a href="#" onclick="mudarAba('visao-geral', this)" class="menu-link active" id="menu-visao">📊 Visão geral</a></li>
+                        <li><a href="#" onclick="mudarAba('minha-mochila', this)" class="menu-link" id="menu-mochila">🎒 Minha mochila</a></li>
+                        <li><a href="#" onclick="mudarAba('disciplinas', this)" class="menu-link" id="menu-disc">📚 Disciplinas</a></li>
+                        <li><a href="#" onclick="mudarAba('notificacoes', this)" class="menu-link" id="menu-notif">🔔 Notificações</a></li>
+                        <li id="menu-prof-li" style="display: none;"><a href="#" onclick="mudarAba('publicar-material', this)" class="menu-link" id="menu-pub">➕ Publicar materiais</a></li>
+                    </ul>
+                </div>
+
+                <div class="user-box">
+                    <strong id="sidebar-username">Ana Beatriz</strong><br>
+                    <span id="sidebar-role" style="font-size: 11px; opacity: 0.8;">Aluno • 9º ano B</span>
+                    <button class="btn-sair" onclick="fazerLogout()">🚪 Sair</button>
+                </div>
+            </aside>
+
+            <!-- CONTEÚDO PRINCIPAL -->
+            <main class="main-workspace">
+                <div class="top-bar-user">
+                    <div>
+                        <h2 id="welcome-title">Olá, Ana!</h2>
+                        <p id="welcome-sub" style="font-size: 13px; color: var(--text-muted);">Confira sua mochila antes de sair de casa.</p>
+                    </div>
+                    <div class="account-badge" id="account-badge-text">Conta do aluno</div>
+                </div>
+
+                <!-- VISÃO GERAL -->
+                <div id="tab-visao-geral" class="tab-pane active">
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <span class="metric-num">4</span>
+                            <span class="metric-label">Aulas mapeadas</span>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-num" id="stat-total">7</span>
+                            <span class="metric-label">Itens na lista</span>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-num" id="stat-checked">0</span>
+                            <span class="metric-label">Já na mochila</span>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-num" id="stat-pending">7</span>
+                            <span class="metric-label">Pendentes</span>
+                        </div>
+                    </div>
+
+                    <div class="progress-box">
+                        <div style="display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 8px;">
+                            <span id="progress-title-text">Mochila pronta em 0%</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" id="main-progress-bar" style="width: 0%;"></div>
+                        </div>
+                        <p style="font-size: 13px; color: var(--text-muted); margin-top: 8px;" id="progress-sub-text">Faltam itens para as próximas aulas.</p>
+                    </div>
+
+                    <div class="classes-container" id="dashboard-classes-grid"></div>
+                </div>
+
+                <!-- MINHA MOCHILA -->
+                <div id="tab-minha-mochila" class="tab-pane">
+                    <h3 style="margin-bottom: 15px;">Checklist Completo da Mochila</h3>
+                    <div class="classes-container" id="mochila-classes-grid"></div>
+                </div>
+
+                <!-- DISCIPLINAS -->
+                <div id="tab-disciplinas" class="tab-pane">
+                    <h3 style="margin-bottom: 15px;">Disciplinas e Materiais Cadastrados</h3>
+                    <div class="classes-container" id="disciplinas-grid"></div>
+                </div>
+
+                <!-- NOTIFICAÇÕES -->
+                <div id="tab-notificacoes" class="tab-pane">
+                    <h3 style="margin-bottom: 15px;">Avisos Recentes</h3>
+                    <div id="notif-list-container"></div>
+                </div>
+
+                <!-- PAINEL DO PROFESSOR -->
+                <div id="tab-publicar-material" class="tab-pane">
+                    <div class="publish-card">
+                        <h3>Publicar materiais da próxima aula</h3>
+                        <form onsubmit="publicarNovoMaterial(event)">
+                            <div class="form-group" style="margin-top: 15px;">
+                                <label>Disciplina</label>
+                                <input type="text" id="pub-disc" class="input-field" required placeholder="Ex: Biologia">
+                            </div>
+                            <div class="form-group">
+                                <label>Data e horário</label>
+                                <input type="text" id="pub-horario" class="input-field" required placeholder="Ex: Amanhã, 08:20">
+                            </div>
+                            <div class="form-group">
+                                <label>Materiais (separados por vírgula ou linha)</label>
+                                <textarea id="pub-itens" class="input-field" rows="4" required placeholder="Livro, Caderno, Lupa"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Aviso para a turma (opcional)</label>
+                                <input type="text" id="pub-aviso" class="input-field" placeholder="Ex: Traga impresso.">
+                            </div>
+                            <button type="submit" class="btn-primary" style="margin-top: 10px;">➕ Publicar e notificar alunos</button>
+                        </form>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
